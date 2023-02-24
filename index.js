@@ -38,7 +38,7 @@ async function getTitleDesc(link) {
       if (c.nodeName == "UL" || c.nodeName == "OL") {
         textContent = getItemized(c);
       }
-      description += textContent + '\n';
+      description += textContent + '\n  ';
     }
     if (textContent == 'Course contents') {
       found = true;
@@ -123,6 +123,7 @@ async function getCourses(pianoDidatticoURL) {
   fs.writeFileSync(`${getCourseName(pianoDidatticoURL)}.md`, md);
   return md;
 }
+
 
 // url del piano didattico
 getCourses('https://corsi.unibo.it/laurea/informatica/insegnamenti/piano/2022/8009/000/000/2022');
