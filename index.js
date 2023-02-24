@@ -6,13 +6,14 @@ const { JSDOM } = jsdom;
 const BASE_URL = 'https://www.unibo.it/en/teaching/course-unit-catalogue/course-unit/';
 
 function getItemized(node) {
-  let textContent = '\n';
+  let textContent = '';
   for (let cc of node.children) {
     if (cc.nodeName == "UL" || cc.nodeName == "OL") {
       return getItemized(cc);
     }
-    textContent += `+ ${cc.textContent.trim()}\n`;
+    textContent += `\n+ ${cc.textContent.trim()}`;
   }
+  textContent += '\n\n';
   return textContent;
 }
 
@@ -36,9 +37,9 @@ async function getTitleDesc(link) {
         return { title, description, link };
       }
       if (c.nodeName == "UL" || c.nodeName == "OL") {
-        textContent = getItemized(c);
-      }
-      description += textContent + '\n  ';
+        description += getItemized(c);
+      } else if (textContent)
+        description += textContent + '   \n';
     }
     if (textContent == 'Course contents') {
       found = true;
@@ -113,8 +114,8 @@ async function getCourses(pianoDidatticoURL) {
       let info = await getCoursesTitlesAndDesc(c);
       md += `### ${title}\n`;
       for (let i of info) {
-        md += `#### ${i.title}\n${i.description}\n`;
-        md += `[${i.link}](${i.link})\n`;
+        md += `#### ${i.title}\n${i.description}\n\n`;
+        md += `[${i.link}](${i.link})\n\n`;
       }
       md += '\n';
     }
